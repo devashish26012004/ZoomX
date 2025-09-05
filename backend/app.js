@@ -19,7 +19,19 @@ const app = express();
 const server = http.createServer(app); // Created an HTTP server and thrown the express server into it
 const io = connectToSocket(server); //created socket server in this function
 
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "https://zoomx-frontend.onrender.com", // your deployed frontend
+      "http://localhost:5173", // local dev (Vite default)
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
+  })
+);
+
+app.options("*", cors()); // 👈 important for preflight
+
 app.use(express.json({ limit: "40kb" }));
 app.use(express.urlencoded({ limit: "40kb", extended: true }));
 
